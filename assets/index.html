@@ -1,0 +1,33 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SAWO GO APP</title>
+  </head>
+  <body>
+    <div class="container">
+      <div
+        class="login-container"
+        style="display: flex; align-items: center; justify-content: center"
+      >
+        <h3 id="success"></h3>
+        <div id="sawo-container" style="height: 400px; width: 300px"></div>
+      </div>
+    </div>
+    <script src="https://websdk.sawolabs.com/sawo.min.js"></script>
+    <script>
+      var config = {
+        containerID: 'sawo-container',
+        identifierType: '{{.identifier_type}}', // can be either 'email' or 'phone_number_sms'
+        apiKey: '{{.apiKey}}', // add your api key here
+        onSuccess: (payload) => {
+          console.log(payload);
+          document.getElementById('success').innerHTML =
+            'User Token : ' + JSON.stringify(payload.verification_token);
+        },
+      };
+      var sawo = new Sawo(config);
+      sawo.showForm();
+    </script>
+  </body>
+</html>
