@@ -1,0 +1,55 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SAWO GO APP</title>
+  </head>
+  <body>
+    <div class="container">
+      <div
+        class="login-container"
+        style="display: flex; align-items: center; justify-content: center"
+      >
+        <h3 id="success"></h3>
+        <div id="sawo-container" style="height: 400px; width: 300px"></div>
+      </div>
+    </div>
+    <script src="https://websdk.sawolabs.com/sawo.min.js"></script>
+    <script>
+      function sendPayload(user_data) {
+        fetch('/verify', {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true,
+          },
+          method: 'POST',
+          body: JSON.stringify(user_data),
+        })
+          .then((response) => {
+            response.text().then(function (user_data) {
+              let result = JSON.parse(user_data);
+              console.log(result);
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+      var config = {
+        containerID: 'sawo-container',
+        identifierType: '{{.identifier_type}}', 
+        apiKey: '{{.apiKey}}', 
+        onSuccess: (payload) => {
+          sendPayload(payload);
+          
+          document.getElementById('success').innerHTML =
+            'User Token : ' + JSON.stringify(payload.verification_token);
+        },
+      };
+      var sawo = new Sawo(config);
+      sawo.showForm();
+    </script>
+  </body>
+</html>
